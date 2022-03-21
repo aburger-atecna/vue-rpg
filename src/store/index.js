@@ -1,14 +1,12 @@
-import { createStore } from 'vuex'
+import { createStore } from "vuex";
+import heros from "./modules/heros";
+import items from "./modules/items";
+import auth from "./modules/auth";
 
 export default createStore({
-  state: {
-  },
-  getters: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
   modules: {
-  }
-})
+    heros,
+    items,
+    auth,
+  },
+});
