@@ -9,7 +9,7 @@ import firebase from 'firebase'
 firebase.auth().onAuthStateChanged((user) =>{
   if(user){
       store.dispatch('auth/setUser', user);
-      store.dispatch('auth/fetchHeros', user);
+      store.dispatch('heros/fetchHeros', user);
   }else{
       store.dispatch('auth/setUser', null);
   }

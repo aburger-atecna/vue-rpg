@@ -1,4 +1,6 @@
 import * as firebase from 'firebase';
+import db from '@/firestore';
+
 
 const state = {
   heroBlank: {
@@ -20,20 +22,10 @@ const state = {
       'Thief'
     ]
   },
-  hero_key: "",
-  heroList: {}
+  heros: []
 };
 
 const mutations = {
-  FETCH_HEROBLANK(state, payload) {
-    state.heroBlank = payload;
-  },
-  setUserKey(state, key) {
-    state.user_key = key;
-  },
-  updateUserList(state, { key, user }) {
-    Vue.set(state.list, key, user);
-  }
 };
 
 const actions = {
@@ -42,19 +34,46 @@ const actions = {
       name: payload.name,
       race: payload.race,
       sexe: payload.sexe,
+      class: payload.class,
       id: firebase.auth().currentUser.uid
     }).then(() => {
       alert("User successfully created!");
     }).catch((error) => {
       console.log(error);
     });
+  },
+  fetchHeros({ commit, state }, user) {
+    console.log('fetch')
+    const uid = user.uid;
+    firebase.firestore().collection("heros").where('id', '==', uid)
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((hero) => {
+          state.heros.push(hero.data());
+        });
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  },
+  removeHero({ commit, state }, user) {
+    firebase.firestore().collection("heros").where('id', '==', user)
+      .get()
+      .then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          doc.ref.delete();
+        })
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 };
 
 const getters = {
   heroBlank: (state) => state.heroBlank,
-  currentHero(state) {
-    return state.heroList[state.hero_key];
+  heros(state) {
+    return state.heros
   }
 };
 

@@ -1,19 +1,16 @@
 import * as firebase from 'firebase';
+import db from '@/firestore'
 import router from '@/router/index';
 
 const state = {
     user: {
         loggedIn: false,
         data: null
-    },
-    heros: []
+    }
 };
 const getters = {
     user(state) {
         return state.user
-    },
-    heros(state) {
-        return state.heros
     }
 };
 const mutations = {
@@ -49,19 +46,6 @@ const actions = {
                     displayName: user.name,
                 }).then(() => { });
             })
-    },
-    fetchHeros({ commit, state }, user) {
-        const uid = user.uid;
-        firebase.firestore().collection("heros").where('id', '==', uid)
-        .get()
-        .then((querySnapshot) => {
-            querySnapshot.forEach((hero) => {
-                state.heros.push(hero.data());
-            });
-        })
-        .catch((err) => {
-            console.log(err)
-        })
     }
 }
 

@@ -1,8 +1,10 @@
 <template>
+DASHBOARD
   <el-card  v-if="heros.length" class="box-card">
     <div class="text item">my hero</div>
     <div>{{ heros }}</div>
-  </el-card>
+    <el-button type="danger" @click="removeHero">Danger</el-button>
+  </el-card> 
   <create-hero v-else />
 </template>
 <script>
@@ -17,9 +19,14 @@ export default {
   computed: {
     // map `this.user` to `this.$store.getters.user`
     ...mapGetters({
-      user: "user",
-      heros: "auth/heros"
+      user: "auth/user",
+      heros: "heros/heros"
     }),
-  }
+  },
+  methods: {
+    removeHero() {
+      this.$store.dispatch("heros/removeHero", this.user.data.uid);
+    },
+  },
 };
 </script>
