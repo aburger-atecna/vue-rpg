@@ -26,6 +26,14 @@ const state = {
 };
 
 const mutations = {
+  CLEAN_HEROS_ARRAY(state) {
+    state.heros = [];
+    console.log('clean:', state.heros)
+  },
+  ADD_HEROS(state, value){
+    console.log(value)
+    state.heros.push(value);
+  }
 };
 
 const actions = {
@@ -37,13 +45,12 @@ const actions = {
       class: payload.class,
       id: firebase.auth().currentUser.uid
     }).then(() => {
-      alert("User successfully created!");
+      alert(`User ${payload.name} successfully created!`);
     }).catch((error) => {
       console.log(error);
     });
   },
   fetchHeros({ commit, state }, user) {
-    console.log('fetch')
     const uid = user.uid;
     firebase.firestore().collection("heros").where('id', '==', uid)
       .get()
@@ -63,6 +70,9 @@ const actions = {
         querySnapshot.forEach(function (doc) {
           doc.ref.delete();
         })
+      })
+      .then(() => {
+        commit('CLEAN_HEROS_ARRAY');
       })
       .catch((err) => {
         console.log(err)
