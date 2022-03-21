@@ -1,14 +1,12 @@
-import db from '@/firestore';
 import * as firebase from 'firebase';
+import router from '@/router/index';
 
 const state = {
     user: {
         loggedIn: false,
-        data: null,
-        id: ''
+        data: null
     },
-    heros: [],
-    activeHero: []
+    heros: []
 };
 const getters = {
     user(state) {
@@ -29,13 +27,14 @@ const mutations = {
 const actions = {
     setUser(context, user){
         context.commit('SET_USER', user);
+        context.commit("SET_LOGGED_IN", user !== null);
     },
-    async login({ commit }, user) {
+    async login({ commit, state }, user) {
         firebase
             .auth()
             .signInWithEmailAndPassword(user.email, user.password)
             .then((data) => {
-                this.$router.replace({ name: "createHero" });
+                router.replace({ path: "../components/dashboard" });
             })
             .catch((err) => {
                 console.log(err)
@@ -63,17 +62,6 @@ const actions = {
         .catch((err) => {
             console.log(err)
         })
-    },
-    fetchUser({ commit }, user) {
-        commit("SET_LOGGED_IN", user !== null);
-        if (user) {
-            commit("SET_USER", {
-                displayName: user.displayName,
-                email: user.email
-            });
-        } else {
-            commit("SET_USER", null);
-        }
     }
 }
 

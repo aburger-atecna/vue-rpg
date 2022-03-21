@@ -55,23 +55,6 @@
         <router-link to="register" class="nav-link">Register</router-link>
       </li>
     </template>
-    <!--
-    <div class="" id="navbarSupportedContent">
-      <template v-if="user">
-        <div class="nav-item">{{ user.data.displayName }}</div>
-        <li class="nav-item">
-          <a class="nav-link" @click.prevent="signOut">Sign out</a>
-        </li>
-      </template>
-      <template>
-        <li class="nav-item">
-          <router-link to="login" class="nav-link">Login</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link to="register" class="nav-link">Register</router-link>
-        </li>
-      </template>
-  </div> -->
   </el-menu>
 </template>
 <script>

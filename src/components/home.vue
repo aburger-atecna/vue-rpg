@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-if="!hasAccount">
+    <template v-if="!loggedIn">
       <el-tabs type="border-card">
         <el-tab-pane label="Login">
           <Login />
@@ -10,22 +10,17 @@
         </el-tab-pane>
       </el-tabs>
     </template>
-    <template v-else>
-      <createHero />
-    </template>
   </div>
 </template>
 <script>
 import { mapGetters } from "vuex";
 import Register from "./auth/register.vue";
 import Login from "./auth/login.vue";
-import CreateHero from "./hero/createHero.vue"
 
 export default {
   components: {
     Register,
-    Login,
-    CreateHero
+    Login
   },
   props: [],
   data() {
@@ -39,7 +34,7 @@ export default {
       // map `this.user` to `this.$store.getters.user`
       user: "auth/user",
     }),
-    hasAccount() {
+    loggedIn() {
       return this.user.loggedIn
     }
   },

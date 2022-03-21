@@ -1,6 +1,4 @@
 import * as firebase from 'firebase';
-import db from '@/firestore'
-
 
 const state = {
   heroBlank: {
