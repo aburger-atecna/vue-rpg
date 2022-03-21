@@ -22,11 +22,11 @@ const mutations = {
     }
 };
 const actions = {
-    setUser(context, user){
+    setUser(context, user) {
         context.commit('SET_USER', user);
         context.commit("SET_LOGGED_IN", user !== null);
     },
-    async login({ commit, state }, user) {
+    login({ commit }, user) {
         firebase
             .auth()
             .signInWithEmailAndPassword(user.email, user.password)
@@ -37,7 +37,7 @@ const actions = {
                 console.log(err)
             })
     },
-    register({ commit }, user) { 
+    register({ commit }, user) {
         firebase
             .auth()
             .createUserWithEmailAndPassword(user.email, user.password)
@@ -46,7 +46,20 @@ const actions = {
                     displayName: user.name,
                 }).then(() => { });
             })
-    }
+    },
+    signOut({ commit }) {
+        firebase
+            .auth()
+            .signOut()
+            .then(() => {
+                router.replace({
+                    name: "home",
+                });
+            })
+            .then(() => {
+                commit('heros/CLEAN_HEROS_ARRAY')
+            });
+    },
 }
 
 

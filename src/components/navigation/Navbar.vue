@@ -72,15 +72,8 @@ export default {
   },
   methods: {
     signOut() {
-      firebase
-        .auth()
-        .signOut()
-        .then(() => {
-          this.$router.replace({
-            name: "home",
-          });
-        });
-    },
+      this.$store.dispatch("auth/signOut", this.form);
+    }
   },
 };
 </script>
