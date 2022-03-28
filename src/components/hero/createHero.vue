@@ -20,10 +20,10 @@
             v-model="currentHero.race"
           >
             <el-option
-              v-for="item in heroBlank.races"
-              :key="item"
-              :label="item"
-              :value="item"
+              v-for="(race, index) in heroBlank.races"
+              :key="index"
+              :label="race.name"
+              :value="race.name"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -31,13 +31,15 @@
           <el-select
             placeholder="please select your class"
             v-model="currentHero.class"
-          >
-            <el-option
-              v-for="item in heroBlank.class"
-              :key="item"
-              :label="item"
-              :value="item"
-            ></el-option>
+            :disabled="!currentHero.race"
+            ><template v-if="currentHero.race">
+              <el-option
+                v-for="subClass in classArray.subClass"
+                :key="subClass"
+                :label="subClass"
+                :value="subClass"
+              ></el-option>
+            </template>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -56,7 +58,8 @@ export default {
   components: {},
   data() {
     return {
-      currentHero: {},
+      currentHero: {
+      },
     };
   },
   computed: {
@@ -66,15 +69,21 @@ export default {
     ...mapGetters({
       heroBlank: "heros/heroBlank",
     }),
-    ...mapActions({}),
+    classArray(){
+      return this.heroBlank.races.find(obj => {
+        return obj.name === this.currentHero.race;
+      })
+    }
   },
   methods: {
     async onSubmit() {
       await this.$store.dispatch("heros/addNewHero", this.currentHero);
       this.currentHero = false;
-    },
+    }
   },
-  created() {},
+  created() {
+    //console.log(this.heroBlank)
+  },
 };
 </script>
 <style scoped>

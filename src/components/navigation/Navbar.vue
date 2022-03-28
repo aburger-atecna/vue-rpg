@@ -19,41 +19,40 @@
       <el-menu-item index="2-2">Class 2</el-menu-item>
       <el-menu-item index="2-3">Class 3</el-menu-item>
     </el-sub-menu>
-    <el-menu-item index="3" disabled
+    <el-menu-item index="3" :disabled="!heros.length"
       ><el-link :underline="false">
         <router-link to="/" class="button is-primary"
           >My Hero</router-link
         ></el-link
       ></el-menu-item
     >
-    <el-menu-item index="4"
-      ><el-link :underline="false"
-        ><router-link to="/dashboard" class="button is-primary"
-          >My Hero</router-link
-        ></el-link
-      ></el-menu-item
-    >
-    <el-menu-item index="5"
-      ><el-link :underline="false"
-        ><router-link to="/login" class="button is-primary"
-          >Login</router-link
-        ></el-link
-      ></el-menu-item
-    >
-    {{ hasAccount }}
     <template v-if="hasAccount">
-      <div class="nav-item">{{ user.data.displayName }}</div>
-      <li class="nav-item">
-        <a class="nav-link" @click.prevent="signOut">Sign out</a>
-      </li>
+      <el-menu-item index="4"
+        ><el-link :underline="false"
+          ><router-link to="/dashboard" class="button is-primary">{{
+            user.data.displayName
+          }}</router-link></el-link
+        ></el-menu-item
+      >
+      <el-menu-item index="5"
+        ><el-link :underline="false"
+          ><router-link
+            to="/"
+            @click.prevent="signOut"
+            class="button is-primary"
+            >Sign out</router-link
+          ></el-link
+        ></el-menu-item
+      >
     </template>
     <template v-if="!hasAccount">
-      <li class="nav-item">
-        <router-link to="login" class="nav-link">Login</router-link>
-      </li>
-      <li class="nav-item">
-        <router-link to="register" class="nav-link">Register</router-link>
-      </li>
+      <el-menu-item index="5"
+        ><el-link :underline="false"
+          ><router-link to="/login" class="button is-primary"
+            >Login</router-link
+          ></el-link
+        ></el-menu-item
+      >
     </template>
   </el-menu>
 </template>
@@ -65,6 +64,7 @@ export default {
     ...mapGetters({
       // map `this.user` to `this.$store.getters.user`
       user: "auth/user",
+      heros: "heros/heros",
     }),
     hasAccount() {
       return this.user.loggedIn;
@@ -73,7 +73,7 @@ export default {
   methods: {
     signOut() {
       this.$store.dispatch("auth/signOut", this.form);
-    }
+    },
   },
 };
 </script>

@@ -10,6 +10,11 @@
         </el-tab-pane>
       </el-tabs>
     </template>
+    <el-card class="box-card el-tabs">
+      <div>
+        Welcome to Vue RPG !
+      </div>
+    </el-card>
   </div>
 </template>
 <script>

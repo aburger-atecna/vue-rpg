@@ -5,12 +5,16 @@ import router from '@/router/index';
 const state = {
     user: {
         loggedIn: false,
-        data: null
+        data: null,
+        id: null,
     }
 };
 const getters = {
     user(state) {
         return state.user
+    },
+    userId(state) {
+        return state.user.id
     }
 };
 const mutations = {
@@ -19,19 +23,37 @@ const mutations = {
     },
     SET_USER(state, data) {
         state.user.data = data;
+    },
+    SET_USER_ID(state, data) {
+        state.user.id = data.uid
     }
 };
 const actions = {
-    setUser(context, user) {
-        context.commit('SET_USER', user);
-        context.commit("SET_LOGGED_IN", user !== null);
+    authAction({ commit }) {
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                commit("SET_USER", user);
+                commit("SET_USER_ID", user);
+                commit("SET_LOGGED_IN", true)
+            } else {
+                commit("SET_USER", null);
+                commit("SET_LOGGED_IN", false)
+            }
+        });
     },
     login({ commit }, user) {
         firebase
             .auth()
             .signInWithEmailAndPassword(user.email, user.password)
             .then((data) => {
-                router.replace({ path: "../components/dashboard" });
+                commit("SET_USER", data.user);
+                commit("SET_USER_ID", data.user);
+                commit("SET_LOGGED_IN", true)
+            })
+            .then(() => {
+                router.replace({
+                    name: "Dashboard"
+                });
             })
             .catch((err) => {
                 console.log(err)
@@ -57,7 +79,7 @@ const actions = {
                 });
             })
             .then(() => {
-                commit('heros/CLEAN_HEROS_ARRAY')
+                commit('heros/CLEAN_HEROS_ARRAY', null, { root: true })
             });
     },
 }
