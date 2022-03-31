@@ -36,11 +36,14 @@
               <el-option
                 v-for="subClass in classArray.subClass"
                 :key="subClass"
-                :label="subClass"
-                :value="subClass"
+                :label="subClass.name"
+                :value="subClass.name"
               ></el-option>
             </template>
           </el-select>
+        </el-form-item>
+        <el-form-item>
+            <statsHero v-if="currentHero.class" :stats="statsArray" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">Create</el-button>
@@ -53,12 +56,22 @@
 
 <script>
 import { mapGetters, mapState, mapActions } from "vuex";
+import statsHero from "./statsHero.vue"
 export default {
   name: "createHero",
-  components: {},
+  components: {statsHero},
   data() {
     return {
       currentHero: {
+        name: '',
+        sexe: '',
+        race: '',
+        class: '',
+        stats: '',
+        level: {
+          number: 1,
+          exp: 0
+        }
       },
     };
   },
@@ -69,17 +82,24 @@ export default {
     ...mapGetters({
       heroBlank: "heros/heroBlank",
     }),
-    classArray(){
-      return this.heroBlank.races.find(obj => {
+    classArray() {
+      return this.heroBlank.races.find((obj) => {
         return obj.name === this.currentHero.race;
-      })
-    }
+      });
+    },
+    statsArray() {
+      return this.classArray.subClass.find((obj) => {
+        return obj.name === this.currentHero.class;
+      });
+    },
   },
   methods: {
     async onSubmit() {
+      console.log(this.currentHero);
+      this.currentHero.stats = this.statsArray.stats;
       await this.$store.dispatch("heros/addNewHero", this.currentHero);
       this.currentHero = false;
-    }
+    },
   },
   created() {
     //console.log(this.heroBlank)

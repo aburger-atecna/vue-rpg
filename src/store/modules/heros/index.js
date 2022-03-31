@@ -4,34 +4,114 @@ import router from '@/router/index';
 
 const state = {
   heroBlank: {
-    name: '',
+    name: "",
     sexes: [
-      'men',
-      'women'
+      "men",
+      "women"
     ],
     races: [
       {
-        name: 'orc',
-        subClass: ['warrior', 'wizard', 'bowman']
+        name: "orc",
+        subClass: [
+          {
+            name: "wizard",
+            stats: {
+              life: 5,
+              mana: 5,
+              atk: 5,
+              def: 5,
+              magicAtk: 5,
+            }
+          },
+          {
+            name: "bowman",
+            stats: {
+              life: 5,
+              mana: 5,
+              atk: 5,
+              def: 5,
+              magicAtk: 5,
+            }
+          },
+          {
+            name: "warrior",
+            stats: {
+              life: 5,
+              mana: 5,
+              atk: 5,
+              def: 5,
+              magicAtk: 5,
+            }
+          }
+        ]
       },
       {
-        name: 'human',
-        subClass: ['warrior', 'priest', 'thief']
+        name: "human",
+        subClass: [
+          {
+            name: "warrior",
+            stats: {
+              life: 5,
+              mana: 5,
+              atk: 5,
+              def: 5,
+              magicAtk: 5
+            }
+          }, {
+            name: "priest",
+            stats: {
+              life: 5,
+              mana: 5,
+              atk: 5,
+              def: 5,
+              magicAtk: 5
+            }
+          }, {
+            name: "thief",
+            stats: {
+              life: 5,
+              mana: 5,
+              atk: 5,
+              def: 5,
+              magicAtk: 5
+            }
+          }
+        ]
       },
       {
-        name: 'elf',
-        subClass: ['wizard', 'bowman', 'priest']
+        name: "elf",
+        subClass: [
+          {
+            name: "wizard",
+            stats: {
+              life: 5,
+              mana: 5,
+              atk: 5,
+              def: 5,
+              magicAtk: 5
+            }
+          }, {
+            name: "bowman",
+            stats: {
+              life: 5,
+              mana: 5,
+              atk: 5,
+              def: 5,
+              magicAtk: 5
+            }
+          }, {
+            name: "priest",
+            stats: {
+              life: 5,
+              mana: 5,
+              atk: 5,
+              def: 5,
+              magicAtk: 5
+            }
+          }
+        ]
       }
-    ],
-    stats: {
-      life: '',
-      mana: '',
-      atk: '',
-      def: '',
-      magicAtk: '',
-      lvl: '',
-      exp: ''
-    }
+    ]
   },
   heros: []
 };
@@ -52,7 +132,10 @@ const actions = {
       race: payload.race,
       sexe: payload.sexe,
       class: payload.class,
-      id: firebase.auth().currentUser.uid
+      id: firebase.auth().currentUser.uid,
+      stats: payload.stats,
+      level: payload.level
+
     }).then(() => {
       alert(`User ${payload.name} successfully created!`)
       router.replace({
@@ -64,13 +147,12 @@ const actions = {
   },
   fetchHeros({ commit, state }, user) {
     const uid = user.id;
-    console.log('ici', uid)
     firebase.firestore().collection("heros").where('id', '==', uid)
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((hero) => {
           commit('ADD_HEROS', hero.data())
-          console.log('fetched')
+          console.log('fetched')        
         });
       })
       .catch((err) => {
